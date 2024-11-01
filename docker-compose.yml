@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+    ports:
+      - '5432:5432'
+    networks:
+      - clientorder
+    healthcheck:
+      test:
+        ['CMD-SHELL', "sh -c 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}'"]
+      interval: 3s
+      timeout: 3s
+      retries: 3
+
+networks:
+  clientorder:
+    driver: bridge
